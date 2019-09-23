@@ -42,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		6A078DE123341EF800D00972 /* water.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = water.txt; sourceTree = "<group>"; };
+		6A70ADEB2338112200ABC74E /* screenshot_water_fountain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot_water_fountain.png; sourceTree = "<group>"; };
 		6AA4A66E2336D3920002E467 /* water2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = water2.txt; sourceTree = "<group>"; };
 		6AA4A6722336EBBE0002E467 /* ResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ResultTableViewCell.swift; path = ../ResultTableViewCell.swift; sourceTree = "<group>"; };
 		6AA4A6742336EF980002E467 /* ResultData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultData.swift; sourceTree = "<group>"; };
@@ -113,6 +114,7 @@
 		6AE887632331913600C355F5 /* ImThirsty */ = {
 			isa = PBXGroup;
 			children = (
+				6A70ADEB2338112200ABC74E /* screenshot_water_fountain.png */,
 				6AA4A66E2336D3920002E467 /* water2.txt */,
 				6A078DE123341EF800D00972 /* water.txt */,
 				6AE887642331913600C355F5 /* AppDelegate.swift */,

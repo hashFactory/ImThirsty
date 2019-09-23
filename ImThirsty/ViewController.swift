@@ -59,7 +59,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func scheduledTimerWithTimeInterval(){
         // Scheduling timer to Call the function "updateCounting" with the interval of 1 seconds
-        timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: Selector(("refreshLocation")), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: Selector(("refreshLocation")), userInfo: nil, repeats: true)
     }
     
     @objc func refreshLocation() {
@@ -118,7 +118,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.distanceDirection.image = UIImage(named: "arrow")
         cell.distanceDirection.transform = .identity
         cell.distanceDirection.transform = CGAffineTransform(rotationAngle: CGFloat(data.toRadians(value: savedPrevious)))
-        UIView.animate(withDuration: 0.2) {
+        
+        UIView.animate(withDuration: 0.1) {
             cell.distanceDirection.transform = CGAffineTransform(rotationAngle: CGFloat(self.data.toRadians(value:  self.results[indexPath.row].heading)))
         }
         
