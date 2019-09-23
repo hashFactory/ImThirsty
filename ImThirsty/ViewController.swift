@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate {
 
     let locationManager = CLLocationManager()
     var timer = Timer()
@@ -18,6 +18,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var results = [DataInput.DataPoint]()
     var previousHeadings = [Double]()
+    
+    var currentLat = 0.0
+    var currentLong = 0.0
     
     /*private func loadResults() {
         
@@ -45,6 +48,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             // locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.startUpdatingLocation()
+            locationManager.delegate = self
             locationManager.startUpdatingHeading()
             
             scheduledTimerWithTimeInterval()
@@ -57,9 +61,27 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         myLocationDisplay.textContainer.lineBreakMode = .byTruncatingTail
     }
     
+    // TODO: Create the same but for location
+    func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
+        
+        let locationString = "Latitude:\t\t\(currentLat)°N\nLongitude:\t\(currentLong)°E\nBearing:\t\t\(newHeading.magneticHeading)°"
+        
+        myLocationDisplay.text = locationString
+        
+        for index in 0..<results.count {
+            results[index].heading = data.getHeading(lat1: results[index].lat, long1: results[index].long, lat2: currentLat, long2: currentLong, currentHeading: newHeading.magneticHeading)
+        }
+        
+        print("Updated heading but not location")
+        
+        self.tableView.reloadData()
+    }
+    
     func scheduledTimerWithTimeInterval(){
         // Scheduling timer to Call the function "updateCounting" with the interval of 1 seconds
-        timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: Selector(("refreshLocation")), userInfo: nil, repeats: true)
+        //timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: Selector(("refreshLocation")), userInfo: nil, repeats: true)
+        self.timer = Timer(timeInterval: 2, target: self, selector: #selector(refreshLocation), userInfo: nil, repeats: true)
+        RunLoop.current.add(self.timer, forMode: .common)
     }
     
     @objc func refreshLocation() {
@@ -72,9 +94,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return
         }
         
+        print("Updated both")
+        
         let locationString = "Latitude:\t\t\(locationLatLong.coordinate.latitude)°N\nLongitude:\t\(locationLatLong.coordinate.longitude)°E\nBearing:\t\t\(locationHeading.magneticHeading)°"
         
         myLocationDisplay.text = locationString
+        
+        self.currentLat = locationLatLong.coordinate.latitude
+        self.currentLong = locationLatLong.coordinate.longitude
         
         results = data.quickFind(lat: locationLatLong.coordinate.latitude, long: locationLatLong.coordinate.longitude, heading: locationHeading.magneticHeading, num: 10)
         
@@ -114,14 +141,22 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         cell.distanceLabel.text = String(round(result.dist)) + " m"
         
         // TODO: ************ Implement image generation
-        cell.distanceDirection.transform = .identity
-        cell.distanceDirection.image = UIImage(named: "arrow")
+        
+        if savedPrevious != self.results[indexPath.row].heading {
+            print("Drew new arrow")
+            cell.distanceDirection.image = UIImage(named: "arrowSmall")
+            cell.distanceDirection.transform = .identity
+            
+            cell.distanceDirection.transform = CGAffineTransform(rotationAngle: CGFloat(self.data.toRadians(value:  self.results[indexPath.row].heading)))
+        }
+        
+        /*
         cell.distanceDirection.transform = .identity
         cell.distanceDirection.transform = CGAffineTransform(rotationAngle: CGFloat(data.toRadians(value: savedPrevious)))
         
         UIView.animate(withDuration: 0.1) {
             cell.distanceDirection.transform = CGAffineTransform(rotationAngle: CGFloat(self.data.toRadians(value:  self.results[indexPath.row].heading)))
-        }
+        }*/
         
         return cell
     }

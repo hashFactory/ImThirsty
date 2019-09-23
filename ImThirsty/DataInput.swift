@@ -78,7 +78,7 @@ class DataInput {
     
     func getNewMax(topNums: [DataPoint]) -> (Int, Double) {
         
-        print(topNums)
+        //print(topNums)
         var maxValue: (index: Int, dist: Double) = (0, 0)
         
         for i in 0..<topNums.count {
