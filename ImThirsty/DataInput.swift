@@ -21,7 +21,6 @@ class DataInput {
             do {
                 let fileData = try String(contentsOfFile: path, encoding: .utf8).replacingOccurrences(of: " ", with: "", options: String.CompareOptions.literal, range: nil)
                 myDoubles = fileData.components(separatedBy: .newlines).compactMap(Double.init)
-                print(myDoubles[1387])
             } catch {
                 print(error)
             }

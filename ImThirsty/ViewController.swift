@@ -54,11 +54,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             scheduledTimerWithTimeInterval()
             // self.view.addSubview(label)
             
-            refreshLocation()
         }
         
         myLocationDisplay.textContainer.maximumNumberOfLines = 10
         myLocationDisplay.textContainer.lineBreakMode = .byTruncatingTail
+        
+        refreshLocation()
     }
     
     // TODO: Create the same but for location
@@ -164,17 +165,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         print(String("comgooglemaps://?center=" + String(self.results[indexPath.row].lat) + "," + String(self.results[indexPath.row].long) + "&zoom=14"))
-        let urlString = String("http://maps.google.com/?daddr=" + String(self.results[indexPath.row].lat) + "," + String(self.results[indexPath.row].long) + "&directionsmode=driving")
+        let urlString = String("http://maps.google.com/?daddr=" + String(self.results[indexPath.row].lat) + "," + String(self.results[indexPath.row].long))
         
         if let url = URL(string: urlString)
         {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            /*
-            if (UIApplication.shared.canOpenURL(URL(string:"comgooglemaps://")!)) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-            } else {
-                print("Can't use comgooglemaps://");
-            }*/
         }
     }
     
