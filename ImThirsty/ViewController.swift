@@ -35,6 +35,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+        let aColor = UIColor(named: "BackgroundColor")
+        if (traitCollection.userInterfaceStyle == UIUserInterfaceStyle.dark) {
+            self.view.backgroundColor = aColor
+        }
+        
         self.refreshButton.addTarget(self, action: Selector(("refreshLocation")), for: .touchUpInside)
         
         self.locationManager.requestWhenInUseAuthorization()
