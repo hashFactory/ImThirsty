@@ -10,29 +10,45 @@ import Foundation
 
 class DataInput {
     
-    typealias DataPoint = (lat: Double, long: Double, dist: Double, heading: Double)
+    typealias DataPoint = (lat: Double, long: Double, timetable: String, dist: Double, heading: Double)
     
     var myDoubles = Array<Double>()
-    var allCoordinates:[(lat: Double, long: Double)] = []
+    var allCoordinates:[(horaire: String, lat: Double, long: Double)] = []
+    var allHoraires = Array<String>()
     
     func readFile(name: String) {
         
+        print("read file")
+        
+        if let path = Bundle.main.path(forResource: (name + "_horaires"), ofType: "txt") {
+            do {
+                let fileData = try String(contentsOfFile: path, encoding: .utf8)
+                allHoraires = fileData.components(separatedBy: .newlines)
+                print(allHoraires)
+                print("worked")
+            } catch {
+                print("didn't work")
+                print(error)
+            }
+        }
+        
         if let path = Bundle.main.path(forResource: name, ofType: "txt") {
             do {
-                let fileData = try String(contentsOfFile: path, encoding: .utf8).replacingOccurrences(of: " ", with: "", options: String.CompareOptions.literal, range: nil)
+                let fileData = try String(contentsOfFile: path, encoding: .utf8)
                 myDoubles = fileData.components(separatedBy: .newlines).compactMap(Double.init)
             } catch {
                 print(error)
             }
-            
-            process()
         }
+        
+        process()
     }
     
     func process() {
         
         for i in 0..<(myDoubles.count / 2) {
-            allCoordinates.append((myDoubles[i * 2], myDoubles[i * 2 + 1]))
+            print(allHoraires.count)
+            allCoordinates.append((allHoraires[i], myDoubles[i * 2], myDoubles[i * 2 + 1]))
         }
         
     }
@@ -98,7 +114,7 @@ class DataInput {
         var maxValue: (index: Int, dist: Double) = (0, Double.infinity)
         
         for _ in 1...num {
-            topNums.append((0, 0, Double.infinity, 0))
+            topNums.append((0, 0, "", Double.infinity, 0))
         }
         
         allCoordinates.forEach { coords in
@@ -106,7 +122,9 @@ class DataInput {
             let distance = hyp(a: coords.lat - lat, b: coords.long - long)
             
             if distance < maxValue.dist {
-                topNums[maxValue.index] = (coords.lat, coords.long, distance, 0)
+                topNums[maxValue.index] = (coords.lat, coords.long, coords.horaire, distance, 0)
+                
+                print(coords.horaire)
                 
                 maxValue = getNewMax(topNums: topNums)
             }

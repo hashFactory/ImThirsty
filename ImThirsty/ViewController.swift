@@ -47,7 +47,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        data.readFile(name: "water2");
+        data.readFile(name: "toilets");
         
         if CLLocationManager.locationServicesEnabled() {
             // locationManager.delegate = self
@@ -144,12 +144,12 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.previousHeadings[indexPath.row] = self.results[indexPath.row].heading
         }
         
-        cell.distanceLabel.text = String(round(result.dist)) + " m"
+        cell.distanceLabel.text = String(Int(round(result.dist))) + "m (" + result.timetable + ")"
         
         // TODO: ************ Implement image generation
         
         if savedPrevious != self.results[indexPath.row].heading {
-            print("Drew new arrow")
+            //print("Drew new arrow")
             cell.distanceDirection.image = UIImage(named: "arrowSmall")
             cell.distanceDirection.transform = .identity
             
