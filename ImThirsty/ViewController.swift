@@ -11,6 +11,8 @@ import MapKit
 import CoreLocation
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CLLocationManagerDelegate {
+    
+    typealias Coordinates = (horaire: String, lat: Double, long: Double)
 
     let locationManager = CLLocationManager()
     var timer = Timer()
@@ -22,11 +24,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var currentLat = 0.0
     var currentLong = 0.0
     
+    var isTargetWater = true
+    
     /*private func loadResults() {
         
         // guard let result1 =
     }*/
     
+    
+    @IBOutlet weak var targetDisplay: UILabel!
     @IBOutlet weak var myLocationDisplay: UITextView!
     @IBOutlet weak var refreshButton: UIButton!
     @IBOutlet weak var tableView: UITableView!
@@ -40,14 +46,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.view.backgroundColor = aColor
         }
         
-        self.refreshButton.addTarget(self, action: Selector(("refreshLocation")), for: .touchUpInside)
+        self.refreshButton.addTarget(self, action: Selector(("toggleTarget")), for: .touchUpInside)
         
         self.locationManager.requestWhenInUseAuthorization()
         
         self.tableView.delegate = self
         self.tableView.dataSource = self
         
-        data.readFile(name: "water2");
+        data.readToiletFile(name: "toilets")
+        data.readWaterFile(name: "water2")
         
         if CLLocationManager.locationServicesEnabled() {
             // locationManager.delegate = self
@@ -65,6 +72,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         myLocationDisplay.textContainer.lineBreakMode = .byTruncatingTail
         
         refreshLocation()
+        refreshTarget()
     }
     
     // TODO: Create the same but for location
@@ -90,6 +98,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         RunLoop.current.add(self.timer, forMode: .common)
     }
     
+    @objc func toggleTarget() {
+        isTargetWater = !isTargetWater
+        refreshTarget()
+    }
+    
+    @objc func refreshTarget() {
+        if (isTargetWater) {
+            self.targetDisplay.text = "Water Fountains"
+        }
+        else {
+            self.targetDisplay.text = "Toilets"
+        }
+        refreshLocation()
+    }
+    
     @objc func refreshLocation() {
 
         guard let locationLatLong = locationManager.location else {
@@ -109,7 +132,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.currentLat = locationLatLong.coordinate.latitude
         self.currentLong = locationLatLong.coordinate.longitude
         
-        results = data.quickFind(lat: locationLatLong.coordinate.latitude, long: locationLatLong.coordinate.longitude, heading: locationHeading.magneticHeading, num: 10)
+        var sentData = [Coordinates]()
+        if (self.isTargetWater) {
+            sentData = data.allWaterCoordinates
+        }
+        else {
+            sentData = data.allToiletCoordinates
+        }
+        
+        results = data.quickFind(lat: locationLatLong.coordinate.latitude, long: locationLatLong.coordinate.longitude, heading: locationHeading.magneticHeading, num: 10, coordinates: sentData)
         
         self.tableView.reloadData()
         
@@ -144,12 +175,18 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.previousHeadings[indexPath.row] = self.results[indexPath.row].heading
         }
         
-        cell.distanceLabel.text = String(round(result.dist)) + " m"
+        if (self.isTargetWater) {
+            cell.distanceLabel.text = String(Int(round(result.dist))) + "m"
+        }
+        else {
+            cell.distanceLabel.text = String(Int(round(result.dist))) + "m (" + result.timetable + ")"
+        }
+        
         
         // TODO: ************ Implement image generation
         
         if savedPrevious != self.results[indexPath.row].heading {
-            print("Drew new arrow")
+            //print("Drew new arrow")
             cell.distanceDirection.image = UIImage(named: "arrowSmall")
             cell.distanceDirection.transform = .identity
             

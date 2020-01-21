@@ -38,6 +38,12 @@
 		6AA4A6792336F0A30002E467 /* ResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA4A6782336F0A30002E467 /* ResultTableViewController.swift */; };
 		6AA5FAC32335353100A3E57E /* DataInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA5FAC22335353100A3E57E /* DataInput.swift */; };
 		6AB46E1B23322E8000325ABB /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6AB46E1A23322E8000325ABB /* CoreLocation.framework */; };
+		6AD9E37023D7B5C5006C0E8E /* screenshot_water.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AD9E36E23D7B5C5006C0E8E /* screenshot_water.png */; };
+		6AD9E37123D7B5C5006C0E8E /* screenshot_water.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AD9E36E23D7B5C5006C0E8E /* screenshot_water.png */; };
+		6AD9E37223D7B5C5006C0E8E /* screenshot_water.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AD9E36E23D7B5C5006C0E8E /* screenshot_water.png */; };
+		6AD9E37323D7B5C5006C0E8E /* screenshot_toilets.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AD9E36F23D7B5C5006C0E8E /* screenshot_toilets.png */; };
+		6AD9E37423D7B5C5006C0E8E /* screenshot_toilets.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AD9E36F23D7B5C5006C0E8E /* screenshot_toilets.png */; };
+		6AD9E37523D7B5C5006C0E8E /* screenshot_toilets.png in Resources */ = {isa = PBXBuildFile; fileRef = 6AD9E36F23D7B5C5006C0E8E /* screenshot_toilets.png */; };
 		6AE109C1233B8825001410C1 /* p3.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6AE109C0233B8825001410C1 /* p3.txt */; };
 		6AE109C2233B8825001410C1 /* p3.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6AE109C0233B8825001410C1 /* p3.txt */; };
 		6AE109C3233B8825001410C1 /* p3.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6AE109C0233B8825001410C1 /* p3.txt */; };
@@ -48,6 +54,12 @@
 		6AE8876F2331913900C355F5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AE8876D2331913900C355F5 /* LaunchScreen.storyboard */; };
 		6AE8877A2331913900C355F5 /* ImThirstyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE887792331913900C355F5 /* ImThirstyTests.swift */; };
 		6AE887852331913900C355F5 /* ImThirstyUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE887842331913900C355F5 /* ImThirstyUITests.swift */; };
+		6AF522A823D6384B00B5BAFF /* toilets.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6AF522A723D6384B00B5BAFF /* toilets.txt */; };
+		6AF522A923D6384B00B5BAFF /* toilets.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6AF522A723D6384B00B5BAFF /* toilets.txt */; };
+		6AF522AA23D6384B00B5BAFF /* toilets.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6AF522A723D6384B00B5BAFF /* toilets.txt */; };
+		6AF522AC23D6385300B5BAFF /* toilets_horaires.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6AF522AB23D6385300B5BAFF /* toilets_horaires.txt */; };
+		6AF522AD23D6385300B5BAFF /* toilets_horaires.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6AF522AB23D6385300B5BAFF /* toilets_horaires.txt */; };
+		6AF522AE23D6385300B5BAFF /* toilets_horaires.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6AF522AB23D6385300B5BAFF /* toilets_horaires.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +92,8 @@
 		6AA4A6782336F0A30002E467 /* ResultTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ResultTableViewController.swift; path = ../ResultTableViewController.swift; sourceTree = "<group>"; };
 		6AA5FAC22335353100A3E57E /* DataInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataInput.swift; sourceTree = "<group>"; };
 		6AB46E1A23322E8000325ABB /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		6AD9E36E23D7B5C5006C0E8E /* screenshot_water.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot_water.png; sourceTree = "<group>"; };
+		6AD9E36F23D7B5C5006C0E8E /* screenshot_toilets.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = screenshot_toilets.png; sourceTree = "<group>"; };
 		6AE109C0233B8825001410C1 /* p3.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = p3.txt; sourceTree = "<group>"; };
 		6AE887612331913600C355F5 /* ImThirsty.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImThirsty.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AE887642331913600C355F5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,6 +108,8 @@
 		6AE887802331913900C355F5 /* ImThirstyUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ImThirstyUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AE887842331913900C355F5 /* ImThirstyUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImThirstyUITests.swift; sourceTree = "<group>"; };
 		6AE887862331913900C355F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6AF522A723D6384B00B5BAFF /* toilets.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = toilets.txt; sourceTree = "<group>"; };
+		6AF522AB23D6385300B5BAFF /* toilets_horaires.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = toilets_horaires.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,10 +182,14 @@
 		6AE887632331913600C355F5 /* ImThirsty */ = {
 			isa = PBXGroup;
 			children = (
+				6AD9E36F23D7B5C5006C0E8E /* screenshot_toilets.png */,
+				6AD9E36E23D7B5C5006C0E8E /* screenshot_water.png */,
 				6AE109C0233B8825001410C1 /* p3.txt */,
 				6A70ADEB2338112200ABC74E /* screenshot_water_fountain.png */,
 				6AA4A66E2336D3920002E467 /* water2.txt */,
 				6A078DE123341EF800D00972 /* water.txt */,
+				6AF522AB23D6385300B5BAFF /* toilets_horaires.txt */,
+				6AF522A723D6384B00B5BAFF /* toilets.txt */,
 				6AE887642331913600C355F5 /* AppDelegate.swift */,
 				6AE887662331913600C355F5 /* ViewController.swift */,
 				6AE887682331913600C355F5 /* Main.storyboard */,
@@ -357,7 +377,11 @@
 			files = (
 				6A1588882338CF440022AD60 /* LaunchScreen.storyboard in Resources */,
 				6AE109C2233B8825001410C1 /* p3.txt in Resources */,
+				6AD9E37123D7B5C5006C0E8E /* screenshot_water.png in Resources */,
+				6AF522AD23D6385300B5BAFF /* toilets_horaires.txt in Resources */,
+				6AF522A923D6384B00B5BAFF /* toilets.txt in Resources */,
 				6A1588892338CF440022AD60 /* Assets.xcassets in Resources */,
+				6AD9E37423D7B5C5006C0E8E /* screenshot_toilets.png in Resources */,
 				6A15888A2338CF440022AD60 /* water.txt in Resources */,
 				6A15888B2338CF440022AD60 /* water2.txt in Resources */,
 				6A15888C2338CF440022AD60 /* Main.storyboard in Resources */,
@@ -370,7 +394,11 @@
 			files = (
 				6A15889D23392C620022AD60 /* LaunchScreen.storyboard in Resources */,
 				6AE109C3233B8825001410C1 /* p3.txt in Resources */,
+				6AD9E37223D7B5C5006C0E8E /* screenshot_water.png in Resources */,
+				6AF522AE23D6385300B5BAFF /* toilets_horaires.txt in Resources */,
+				6AF522AA23D6384B00B5BAFF /* toilets.txt in Resources */,
 				6A15889E23392C620022AD60 /* Assets.xcassets in Resources */,
+				6AD9E37523D7B5C5006C0E8E /* screenshot_toilets.png in Resources */,
 				6A15889F23392C620022AD60 /* water.txt in Resources */,
 				6A1588A023392C620022AD60 /* water2.txt in Resources */,
 				6A1588A123392C620022AD60 /* Main.storyboard in Resources */,
@@ -383,7 +411,11 @@
 			files = (
 				6AE8876F2331913900C355F5 /* LaunchScreen.storyboard in Resources */,
 				6AE109C1233B8825001410C1 /* p3.txt in Resources */,
+				6AD9E37023D7B5C5006C0E8E /* screenshot_water.png in Resources */,
+				6AF522AC23D6385300B5BAFF /* toilets_horaires.txt in Resources */,
+				6AF522A823D6384B00B5BAFF /* toilets.txt in Resources */,
 				6AE8876C2331913900C355F5 /* Assets.xcassets in Resources */,
+				6AD9E37323D7B5C5006C0E8E /* screenshot_toilets.png in Resources */,
 				6A078DE223341EF800D00972 /* water.txt in Resources */,
 				6AA4A66F2336D3920002E467 /* water2.txt in Resources */,
 				6AE8876A2331913600C355F5 /* Main.storyboard in Resources */,

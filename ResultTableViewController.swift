@@ -50,8 +50,9 @@ class ResultTableViewController: UITableViewController {
         }
         
         let result = results[indexPath.row]
+        let distanceString = String( round(result.distance))
         
-        cell.distanceLabel.text = String(round(result.distance)) + " m"
+        cell.distanceLabel.text = distanceString + " m (" + result.timetable + ")"
         
         // TODO: ************ Implement image generation
         cell.distanceDirection.image = UIImage(named: "water_faucet")

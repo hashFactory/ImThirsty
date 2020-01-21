@@ -10,31 +10,72 @@ import Foundation
 
 class DataInput {
     
-    typealias DataPoint = (lat: Double, long: Double, dist: Double, heading: Double)
+    typealias DataPoint = (lat: Double, long: Double, timetable: String, dist: Double, heading: Double)
+    typealias Coordinates = (horaire: String, lat: Double, long: Double)
     
-    var myDoubles = Array<Double>()
-    var allCoordinates:[(lat: Double, long: Double)] = []
+    var myToiletDoubles = Array<Double>()
+    var myWaterDoubles = Array<Double>()
+    var allToiletCoordinates:[Coordinates] = []
+    var allWaterCoordinates:[Coordinates] = []
+    var allHoraires = Array<String>()
     
-    func readFile(name: String) {
+    func readWaterFile(name: String) {
         
         if let path = Bundle.main.path(forResource: name, ofType: "txt") {
             do {
-                let fileData = try String(contentsOfFile: path, encoding: .utf8).replacingOccurrences(of: " ", with: "", options: String.CompareOptions.literal, range: nil)
-                myDoubles = fileData.components(separatedBy: .newlines).compactMap(Double.init)
+                let fileData = try String(contentsOfFile: path, encoding: .utf8)
+                myWaterDoubles = fileData.components(separatedBy: .newlines).compactMap(Double.init)
             } catch {
                 print(error)
             }
-            
-            process()
         }
+        
+        processWater()
     }
     
-    func process() {
+    func readToiletFile(name: String) {
         
-        for i in 0..<(myDoubles.count / 2) {
-            allCoordinates.append((myDoubles[i * 2], myDoubles[i * 2 + 1]))
+        print("read file")
+        
+        if let path = Bundle.main.path(forResource: (name + "_horaires"), ofType: "txt") {
+            do {
+                let fileData = try String(contentsOfFile: path, encoding: .utf8)
+                allHoraires = fileData.components(separatedBy: .newlines)
+                print(allHoraires)
+                print("worked")
+            } catch {
+                print("didn't work")
+                print(error)
+            }
         }
         
+        if let path = Bundle.main.path(forResource: name, ofType: "txt") {
+            do {
+                let fileData = try String(contentsOfFile: path, encoding: .utf8)
+                myToiletDoubles = fileData.components(separatedBy: .newlines).compactMap(Double.init)
+            } catch {
+                print(error)
+            }
+        }
+        
+        processToilet()
+    }
+    
+    func processWater() {
+        
+        for i in 0..<(myWaterDoubles.count / 2) {
+            allWaterCoordinates.append(("", myWaterDoubles[i * 2], myWaterDoubles[i * 2 + 1]))
+        }
+    
+    }
+    
+    func processToilet() {
+        
+        for i in 0..<(myToiletDoubles.count / 2) {
+            print(allHoraires.count)
+            allToiletCoordinates.append((allHoraires[i], myToiletDoubles[i * 2], myToiletDoubles[i * 2 + 1]))
+        }
+    
     }
     
     func toRadians(value: Double) -> Double {
@@ -92,21 +133,21 @@ class DataInput {
     }
     
     // Finds the top #num quickly for further processing later on
-    func quickFind(lat: Double, long: Double, heading: Double, num: Int) -> [DataPoint] {
+    func quickFind(lat: Double, long: Double, heading: Double, num: Int, coordinates: [Coordinates]) -> [DataPoint] {
         
         var topNums: [DataPoint] = []
         var maxValue: (index: Int, dist: Double) = (0, Double.infinity)
         
         for _ in 1...num {
-            topNums.append((0, 0, Double.infinity, 0))
+            topNums.append((0, 0, "", Double.infinity, 0))
         }
         
-        allCoordinates.forEach { coords in
+        coordinates.forEach { coords in
             
             let distance = hyp(a: coords.lat - lat, b: coords.long - long)
             
             if distance < maxValue.dist {
-                topNums[maxValue.index] = (coords.lat, coords.long, distance, 0)
+                topNums[maxValue.index] = (coords.lat, coords.long, coords.horaire, distance, 0)
                 
                 maxValue = getNewMax(topNums: topNums)
             }
