@@ -1,0 +1,29 @@
+My understanding of OSM data:
+- Map data comes in `.osm` files (which are glorified xml files). These files are usually packaged in `.pbf` files which is basically like a tarball but it’s super optimized for map data. You never have to unpackage it and *should* just use the pbf files in QGIS. Whenever you put in a query or apply some processing to the data, it’ll just work on the .pbf directly no problem.
+- To first import the data of a region you want, download from http://download.geofabrik.de/ . There are regions upon subregions. In QGIS create a new project and simply drag and drop your .osm.pbf into your blank map. It’ll ask you which types of data you want to import. (Be careful, by default *all* are unselected, you have to manually pick the ones you want or all of them). There should be 5.
+- Basic rundown of data types:
+    - Lines: Usually roads/paths/etc…
+    - Multilinestrings: Usually *special* paths such as bus routes, hiking trails, etc…
+    - Points: Most interesting one. Represents anything from points of interests, to street addresses, to _amenities_ .
+    - Other relations: Usually relations between lines. Could be for example street rules like no left turn between these two streets
+    - Multiline
+- Amenities: Each datum (*datum* to not be confused with Points) contains many properties: Location (In WGS84 coordinates (aka lat/long)), and many other useless ones. The interesting part of amenities is the `other_tags` category. It contains in a JSON like string every property about this amenity including its type and lots of other information about it. The possible types are specified here: Amenities can be anything from BBQs to restrooms to post offices to benches. You should use the `Processing Toolbox -> Vector Selection -> Extract by Expression` tool to extract whatever type of amenity or point you want. In the `Expression Builder` you’ll be able to make SQL-like queries (!!!!) on the data. I was able to extract the water fountains using `“other_tags” LIKE ‘%drinking_water%’`. You should be able to figure out how to build whichever query you want using the GIS stack exchange ( https://gis.stackexchange.com/ ).
+- You can continue to filter out what you want by writing more and more queries or for example including queries like `“other_tags” ILIKE ‘%public\“=>\“yes%`. 
+- Another very useful tool is the `Attribute Table`. It allows you to to view a sample of 100 (or as many as you want) datum and see their attributes.  You can perform a simple text search in this window so that you can quickly find how, for example, toilets have their metadata defined. You get to this by right clicking the layer you want, usually `Points` and selecting `Open Attribute table…`
+- As for how I used QGIS for my app here was my workflow:
+    - Import points from .osm.pbf of Ile-de-France (smallest region file Paris is in)
+    - `Extract by expression` using queries like the examples above
+    - Check attribute table to make sure there weren’t any false positives or other issues
+    - Right click layer -> Export -> Save Features As…
+        - Here specify GeoJSON file (easiest to work with imo)
+        - There’s a dropdown called `Select fields to export …` and here only leave `other_tags` since it’s the only interesting one
+        - And click ok
+    - Once you have your GeoJSON file, honestly I just go into Sublime Text to get rid of everything I don’t want using multiline selection. Or just Regex for decimals (coordinates) if you don’t care about the rest of the `other_tags`.
+    - Do any post processing you want to end up with just coordinates and optionally any bits of metadata you want
+    - Read in file in your app
+    - (I’ll add any post processing scripts to the GitHub repo)
+- TIPS:
+    - Only import Points unless you have a reason not to
+    - There are settings to speed up the render because it is *suuupperrrr* slow to render even just a city (look up which settings are best or disable live refresh of render window)
+    - Keep in mind 1MB of .osm.pbf equates to sometimes 20MB+ of actual XML data. Extracting by expression of a 50MB .osm.pbf file can take up to several minutes.
+    - If you already know exactly what you want it’s super useful to use `osmium`. It’s a tool to run extraction queries (and many other powerful things) on .osm.pbf files. It would look something like this: `osmium tags-filter -o /Users/tristan/Documents/osm/planet-amenities.osm.pbf /Volumes/Seagate/planet-190916.osm.pbf n/amenity`. This one read the entire planet file (50GB+ of a .osm.pbf !!!) and put any point (node) tagged as amenity in a local file. It ran in just under an hour which would just not be possible in QGIS. ( https://osmcode.org/osmium-tool/manual.html#filtering-by-tags )
