@@ -26,6 +26,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     var isTargetWater = true
     
+    var api = OverpassApi()
+    
     /*private func loadResults() {
         
         // guard let result1 =
@@ -86,7 +88,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             results[index].heading = data.getHeading(lat1: results[index].lat, long1: results[index].long, lat2: currentLat, long2: currentLong, currentHeading: newHeading.magneticHeading)
         }
         
-        print("Updated heading but not location")
+        //print("Updated heading but not location")
         
         self.tableView.reloadData()
     }
@@ -123,7 +125,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             return
         }
         
-        print("Updated both")
+        //print("Updated both")
         
         let locationString = "Latitude:\t\t\(locationLatLong.coordinate.latitude)°N\nLongitude:\t\(locationLatLong.coordinate.longitude)°E\nBearing:\t\t\(locationHeading.magneticHeading)°"
         
@@ -135,9 +137,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         var sentData = [Coordinates]()
         if (self.isTargetWater) {
             sentData = data.allWaterCoordinates
+            // TODO: GET RID OF
+            print("Fetched drinking water")
+            api.fetchAmenities(amenity: "drinking_water", lat: self.currentLat, long: self.currentLong, results: 300)
         }
         else {
             sentData = data.allToiletCoordinates
+            print("Fetched toilets")
+            api.fetchAmenities(amenity: "toilets", lat: self.currentLat, long: self.currentLong, results: 300)
         }
         
         results = data.quickFind(lat: locationLatLong.coordinate.latitude, long: locationLatLong.coordinate.longitude, heading: locationHeading.magneticHeading, num: 10, coordinates: sentData)

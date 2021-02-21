@@ -72,7 +72,7 @@ class DataInput {
     func processToilet() {
         
         for i in 0..<(myToiletDoubles.count / 2) {
-            print(allHoraires.count)
+            //print(allHoraires.count)
             allToiletCoordinates.append((allHoraires[i], myToiletDoubles[i * 2], myToiletDoubles[i * 2 + 1]))
         }
     
@@ -160,7 +160,7 @@ class DataInput {
         
         topNums.sort(by: {$0.dist < $1.dist})
         
-        print(topNums)
+        //print(topNums)
         
         return topNums
     }
