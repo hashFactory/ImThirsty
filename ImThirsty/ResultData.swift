@@ -23,5 +23,20 @@ class ResultData {
         distance = _distance
         direction = _direction
     }
-    
+}
+
+struct Amenity: Codable {
+    let type: String
+    let id: Int
+    let lat: Double
+    let lon: Double
+    let tags: Dictionary<String, String>
+}
+
+struct Response: Codable {
+    var total: Int? = 0
+    let version: Double
+    let generator: String
+    let osm3s: Dictionary<String, String>?
+    var elements: [Amenity]
 }

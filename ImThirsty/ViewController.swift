@@ -16,7 +16,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
 
     let locationManager = CLLocationManager()
     var timer = Timer()
-    var data = DataInput();
+    var data = DataInput()
     
     var results = [DataInput.DataPoint]()
     var previousHeadings = [Double]()
@@ -25,8 +25,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var currentLong = 0.0
     
     var isTargetWater = true
-    
-    var api = OverpassApi()
     
     /*private func loadResults() {
         
@@ -48,7 +46,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             self.view.backgroundColor = aColor
         }
         
-        self.refreshButton.addTarget(self, action: Selector(("toggleTarget")), for: .touchUpInside)
+        self.refreshButton.addTarget(self, action: #selector(self.toggleTarget), for: .touchUpInside)
         
         self.locationManager.requestWhenInUseAuthorization()
         
@@ -60,7 +58,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if CLLocationManager.locationServicesEnabled() {
             // locationManager.delegate = self
-            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            //locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
             locationManager.startUpdatingLocation()
             locationManager.delegate = self
             locationManager.startUpdatingHeading()
@@ -77,10 +76,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         refreshTarget()
     }
     
+    public func updateTable(res: [DataInput.DataPoint]) {
+        self.results = res
+        self.tableView.reloadData()
+    }
+    
     // TODO: Create the same but for location
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         
-        let locationString = "Latitude:\t\t\(currentLat)°N\nLongitude:\t\(currentLong)°E\nBearing:\t\t\(newHeading.magneticHeading)°"
+        let locationString = String(format: "Latitude:\t\t%.2f°N\nLongitude:\t%.2f°E\nBearing:\t\t%.2f°", arguments: [ currentLat, currentLong, newHeading.magneticHeading])
         
         myLocationDisplay.text = locationString
         
@@ -96,7 +100,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func scheduledTimerWithTimeInterval(){
         // Scheduling timer to Call the function "updateCounting" with the interval of 1 seconds
         //timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: Selector(("refreshLocation")), userInfo: nil, repeats: true)
-        self.timer = Timer(timeInterval: 2, target: self, selector: #selector(refreshLocation), userInfo: nil, repeats: true)
+        self.timer = Timer(timeInterval: 20, target: self, selector: #selector(refreshLocation), userInfo: nil, repeats: true)
         RunLoop.current.add(self.timer, forMode: .common)
     }
     
@@ -127,29 +131,31 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //print("Updated both")
         
-        let locationString = "Latitude:\t\t\(locationLatLong.coordinate.latitude)°N\nLongitude:\t\(locationLatLong.coordinate.longitude)°E\nBearing:\t\t\(locationHeading.magneticHeading)°"
+        let locationString = String(format: "Latitude:\t\t%.5f°N\nLongitude:\t%.5f°E\nBearing:\t\t%.2f°", arguments: [ locationLatLong.coordinate.latitude, locationLatLong.coordinate.longitude, locationHeading.magneticHeading])
         
         myLocationDisplay.text = locationString
         
         self.currentLat = locationLatLong.coordinate.latitude
         self.currentLong = locationLatLong.coordinate.longitude
         
-        var sentData = [Coordinates]()
+        data.update(lat: self.currentLat, long: self.currentLong, heading: locationHeading.magneticHeading)
+        
+        //var sentData: [Coordinates] = []
         if (self.isTargetWater) {
-            sentData = data.allWaterCoordinates
+            //sentData = data.allWaterCoordinates
             // TODO: GET RID OF
             print("Fetched drinking water")
-            api.fetchAmenities(amenity: "drinking_water", lat: self.currentLat, long: self.currentLong, results: 300)
+            data.fetchAmenities(view: self, amenity: "drinking_water", lat: self.currentLat, long: self.currentLong, results: 10)
         }
         else {
-            sentData = data.allToiletCoordinates
+            //sentData = data.allToiletCoordinates
             print("Fetched toilets")
-            api.fetchAmenities(amenity: "toilets", lat: self.currentLat, long: self.currentLong, results: 300)
+            data.fetchAmenities(view: self, amenity: "toilets", lat: self.currentLat, long: self.currentLong, results: 10)
         }
         
-        results = data.quickFind(lat: locationLatLong.coordinate.latitude, long: locationLatLong.coordinate.longitude, heading: locationHeading.magneticHeading, num: 10, coordinates: sentData)
+        //self.results = data.quickFind(lat: locationLatLong.coordinate.latitude, long: locationLatLong.coordinate.longitude, heading: locationHeading.magneticHeading, num: 10, coordinates: sentData)
         
-        self.tableView.reloadData()
+        //self.tableView.reloadData()
         
         print("Horizontal: \(locationLatLong.horizontalAccuracy)\nVertical: \(locationLatLong.verticalAccuracy)")
     }
@@ -221,7 +227,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
-    
     
 
 }
