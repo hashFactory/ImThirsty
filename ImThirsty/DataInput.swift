@@ -13,11 +13,24 @@ class DataInput {
     typealias DataPoint = (lat: Double, long: Double, timetable: String, dist: Double, heading: Double)
     typealias Coordinates = (horaire: String, lat: Double, long: Double)
     
+    // Offline
     var myToiletDoubles = Array<Double>()
     var myWaterDoubles = Array<Double>()
     var allToiletCoordinates:[Coordinates] = []
     var allWaterCoordinates:[Coordinates] = []
     var allHoraires = Array<String>()
+    
+    // OverpassAPI
+    let rawURL: String = "https://z.overpass-api.de/api/interpreter"
+    var resultCount: Int = 0
+    var wantedResults: Int = 0
+    var radius: Int = 500
+    var amenities: [Amenity] = []
+    var amenityString: String = ""
+    
+    var lat: Double = 0
+    var long: Double = 0
+    var heading: Double = 0
     
     func readWaterFile(name: String) {
         
@@ -62,17 +75,14 @@ class DataInput {
     }
     
     func processWater() {
-        
         for i in 0..<(myWaterDoubles.count / 2) {
             allWaterCoordinates.append(("", myWaterDoubles[i * 2], myWaterDoubles[i * 2 + 1]))
         }
-    
     }
     
     func processToilet() {
-        
         for i in 0..<(myToiletDoubles.count / 2) {
-            print(allHoraires.count)
+            //print(allHoraires.count)
             allToiletCoordinates.append((allHoraires[i], myToiletDoubles[i * 2], myToiletDoubles[i * 2 + 1]))
         }
     
@@ -117,16 +127,13 @@ class DataInput {
     }
     
     func getNewMax(topNums: [DataPoint]) -> (Int, Double) {
-        
         //print(topNums)
         var maxValue: (index: Int, dist: Double) = (0, 0)
         
         for i in 0..<topNums.count {
-            
             if topNums[i].dist > maxValue.dist {
                 maxValue = (i, topNums[i].dist)
             }
-            
         }
         
         return maxValue
@@ -134,7 +141,6 @@ class DataInput {
     
     // Finds the top #num quickly for further processing later on
     func quickFind(lat: Double, long: Double, heading: Double, num: Int, coordinates: [Coordinates]) -> [DataPoint] {
-        
         var topNums: [DataPoint] = []
         var maxValue: (index: Int, dist: Double) = (0, Double.infinity)
         
@@ -143,12 +149,10 @@ class DataInput {
         }
         
         coordinates.forEach { coords in
-            
             let distance = hyp(a: coords.lat - lat, b: coords.long - long)
             
             if distance < maxValue.dist {
                 topNums[maxValue.index] = (coords.lat, coords.long, coords.horaire, distance, 0)
-                
                 maxValue = getNewMax(topNums: topNums)
             }
         }
@@ -159,9 +163,98 @@ class DataInput {
         }
         
         topNums.sort(by: {$0.dist < $1.dist})
-        
-        print(topNums)
+        //print(topNums)
         
         return topNums
+    }
+    
+    func generateBody(amenity: String, radius: Int, lat: Double, long: Double) -> Data {
+        // returns the body of the POST request we want to submit to overpass turbo
+        let body = "[out:json][timeout:25];(node[\"amenity\"=\"" + amenity + "\"](around: " + String(radius) + ", " + String(lat) + ", " + String(long) + "););out body;"
+        return Data(body.utf8)
+    }
+    
+    func dispatchRequests(view: ViewController, amenity: String, lat: Double, long: Double) {
+        let decoder: JSONDecoder = JSONDecoder()
+        
+        if let url = URL(string: self.rawURL) {
+            // prepare request
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.httpBody = generateBody(amenity: amenity, radius: radius, lat: lat, long: long)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            print("Called " + amenity + ", radius=" + String(radius) + ", lat=" + String(lat) + ", long: " + String(long) + ", and have " + String(amenities.count) + " results so far.")
+            
+            // make HTTP request
+            //let semaphore = DispatchSemaphore(value: 0)
+            let task = URLSession.shared.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) in
+                //semaphore.signal()
+                // check if we didn't get a response
+                if error != nil {
+                    print("THE API CALL FAILED")
+                }
+                // once we have the data, sed to function
+                if let data = data as Data? {
+                    print(data)
+                    
+                    let resData: Response = try! decoder.decode(Response.self, from: data)
+                    print(resData)
+                    
+                    // parse received json and update our array
+                    self.amenities = resData.elements
+                    self.resultCount = self.amenities.count
+
+                    DispatchQueue.main.async {
+                        let result = self.quickFind(lat: self.lat, long: self.long, heading: self.heading, num: self.wantedResults, coordinates: self.resultsToCoordinates())
+                        
+                        view.updateTable(res: result)
+                        
+                        self.radius *= 3
+                        if (self.resultCount < self.wantedResults) {
+                            self.dispatchRequests(view: view, amenity: amenity, lat: lat, long: long)
+                        }
+                    }
+                }
+            } )
+            
+            task.resume()
+            //semaphore.wait()
+        }
+    }
+    
+    func update(lat: Double, long: Double, heading: Double) {
+        self.lat = lat
+        self.long = long
+        self.heading = heading
+    }
+    
+    func resultsToCoordinates() -> [Coordinates] {
+        var coords: [Coordinates] = []
+        
+        for i in 0..<self.amenities.count {
+            coords.append((self.amenities[i].tags["amenity"] ?? "", self.amenities[i].lat, self.amenities[i].lon))
+        }
+        
+        if (coords.count > 0 && coords[0].horaire.localizedStandardContains("rinking")) {
+            self.allWaterCoordinates = coords
+        } else if (coords.count > 0 && coords[0].horaire.localizedStandardContains("oilet")) {
+            self.allToiletCoordinates = coords
+        } else {
+            print("Wrong amenity requested: \"" + self.amenityString + "\"")
+        }
+        
+        return coords
+    }
+    
+    func fetchAmenities(view: ViewController, amenity: String, lat: Double, long: Double, results: Int) {
+        // init vars we need
+        self.amenities = []
+        self.radius = 500
+        self.resultCount = 0
+        
+        self.wantedResults = results
+        self.amenityString = amenity
+        
+        self.dispatchRequests(view: view, amenity: amenity, lat: lat, long: long)
     }
 }
