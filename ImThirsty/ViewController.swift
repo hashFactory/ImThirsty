@@ -59,7 +59,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         if CLLocationManager.locationServicesEnabled() {
             // locationManager.delegate = self
             //locationManager.desiredAccuracy = kCLLocationAccuracyBest
-            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
             locationManager.startUpdatingLocation()
             locationManager.delegate = self
             locationManager.startUpdatingHeading()
@@ -84,7 +84,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // TODO: Create the same but for location
     func locationManager(_ manager: CLLocationManager, didUpdateHeading newHeading: CLHeading) {
         
-        let locationString = String(format: "Latitude:\t\t%.2f°N\nLongitude:\t%.2f°E\nBearing:\t\t%.2f°", arguments: [ currentLat, currentLong, newHeading.magneticHeading])
+        let locationString = String(format: "Latitude:\t\t%.5f°N\nLongitude:\t%.5f°E\nBearing:\t\t%.5f°", arguments: [ currentLat, currentLong, newHeading.magneticHeading])
         
         myLocationDisplay.text = locationString
         
@@ -155,7 +155,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         //self.results = data.quickFind(lat: locationLatLong.coordinate.latitude, long: locationLatLong.coordinate.longitude, heading: locationHeading.magneticHeading, num: 10, coordinates: sentData)
         
-        //self.tableView.reloadData()
+        //self.updateTable(res: )
         
         print("Horizontal: \(locationLatLong.horizontalAccuracy)\nVertical: \(locationLatLong.verticalAccuracy)")
     }

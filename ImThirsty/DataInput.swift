@@ -24,7 +24,7 @@ class DataInput {
     let rawURL: String = "https://z.overpass-api.de/api/interpreter"
     var resultCount: Int = 0
     var wantedResults: Int = 0
-    var radius: Int = 200
+    var radius: Int = 500
     var amenities: [Amenity] = []
     var amenityString: String = ""
     
@@ -186,9 +186,9 @@ class DataInput {
             print("Called " + amenity + ", radius=" + String(radius) + ", lat=" + String(lat) + ", long: " + String(long) + ", and have " + String(amenities.count) + " results so far.")
             
             // make HTTP request
-            let semaphore = DispatchSemaphore(value: 0)
+            //let semaphore = DispatchSemaphore(value: 0)
             let task = URLSession.shared.dataTask(with: request, completionHandler: { (data: Data?, response: URLResponse?, error: Error?) in
-                semaphore.signal()
+                //semaphore.signal()
                 // check if we didn't get a response
                 if error != nil {
                     print("THE API CALL FAILED")
@@ -196,17 +196,19 @@ class DataInput {
                 // once we have the data, sed to function
                 if let data = data as Data? {
                     print(data)
+                    
                     let resData: Response = try! decoder.decode(Response.self, from: data)
                     print(resData)
                     
-                    OS_dispatch_queue_serial.main.async {
-                        // parse received json and update our array
-                        self.amenities = resData.elements
-                        self.resultCount = self.amenities.count
-                        
+                    // parse received json and update our array
+                    self.amenities = resData.elements
+                    self.resultCount = self.amenities.count
+
+                    DispatchQueue.main.async {
                         let result = self.quickFind(lat: self.lat, long: self.long, heading: self.heading, num: self.wantedResults, coordinates: self.resultsToCoordinates())
                         
                         view.updateTable(res: result)
+                        
                         self.radius *= 3
                         if (self.resultCount < self.wantedResults) {
                             self.dispatchRequests(view: view, amenity: amenity, lat: lat, long: long)
@@ -216,7 +218,7 @@ class DataInput {
             } )
             
             task.resume()
-            semaphore.wait()
+            //semaphore.wait()
         }
     }
     
@@ -247,7 +249,7 @@ class DataInput {
     func fetchAmenities(view: ViewController, amenity: String, lat: Double, long: Double, results: Int) {
         // init vars we need
         self.amenities = []
-        self.radius = 200
+        self.radius = 500
         self.resultCount = 0
         
         self.wantedResults = results

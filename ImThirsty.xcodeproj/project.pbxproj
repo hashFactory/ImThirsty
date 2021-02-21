@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6A078DE223341EF800D00972 /* water.txt in Resources */ = {isa = PBXBuildFile; fileRef = 6A078DE123341EF800D00972 /* water.txt */; };
-		6A1570D825E1C78600E0C6B1 /* OverpassAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1570D725E1C78600E0C6B1 /* OverpassAPI.swift */; };
-		6A1570D925E1C78600E0C6B1 /* OverpassAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1570D725E1C78600E0C6B1 /* OverpassAPI.swift */; };
-		6A1570DA25E1C78600E0C6B1 /* OverpassAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1570D725E1C78600E0C6B1 /* OverpassAPI.swift */; };
 		6A15887F2338CF440022AD60 /* ResultData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA4A6742336EF980002E467 /* ResultData.swift */; };
 		6A1588802338CF440022AD60 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE887662331913600C355F5 /* ViewController.swift */; };
 		6A1588812338CF440022AD60 /* ResultTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA4A6782336F0A30002E467 /* ResultTableViewController.swift */; };
@@ -84,7 +81,6 @@
 
 /* Begin PBXFileReference section */
 		6A078DE123341EF800D00972 /* water.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = water.txt; sourceTree = "<group>"; };
-		6A1570D725E1C78600E0C6B1 /* OverpassAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverpassAPI.swift; sourceTree = "<group>"; };
 		6A1588902338CF440022AD60 /* ImThirsty copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ImThirsty copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6A1588912338CF440022AD60 /* ImThirsty copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ImThirsty copy-Info.plist"; path = "/Users/tristan/Documents/ImThirsty/ImThirsty copy-Info.plist"; sourceTree = "<absolute>"; };
 		6A1588A523392C620022AD60 /* imThirsty Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "imThirsty Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -186,7 +182,6 @@
 		6AE887632331913600C355F5 /* ImThirsty */ = {
 			isa = PBXGroup;
 			children = (
-				6A1570D725E1C78600E0C6B1 /* OverpassAPI.swift */,
 				6AD9E36F23D7B5C5006C0E8E /* screenshot_toilets.png */,
 				6AD9E36E23D7B5C5006C0E8E /* screenshot_water.png */,
 				6AE109C0233B8825001410C1 /* p3.txt */,
@@ -450,7 +445,6 @@
 			files = (
 				6A15887F2338CF440022AD60 /* ResultData.swift in Sources */,
 				6A1588802338CF440022AD60 /* ViewController.swift in Sources */,
-				6A1570D925E1C78600E0C6B1 /* OverpassAPI.swift in Sources */,
 				6A1588812338CF440022AD60 /* ResultTableViewController.swift in Sources */,
 				6A1588822338CF440022AD60 /* AppDelegate.swift in Sources */,
 				6A1588832338CF440022AD60 /* ResultTableViewCell.swift in Sources */,
@@ -464,7 +458,6 @@
 			files = (
 				6A15889423392C620022AD60 /* ResultData.swift in Sources */,
 				6A15889523392C620022AD60 /* ViewController.swift in Sources */,
-				6A1570DA25E1C78600E0C6B1 /* OverpassAPI.swift in Sources */,
 				6A15889623392C620022AD60 /* ResultTableViewController.swift in Sources */,
 				6A15889723392C620022AD60 /* AppDelegate.swift in Sources */,
 				6A15889823392C620022AD60 /* ResultTableViewCell.swift in Sources */,
@@ -478,7 +471,6 @@
 			files = (
 				6AA4A6752336EF980002E467 /* ResultData.swift in Sources */,
 				6AE887672331913600C355F5 /* ViewController.swift in Sources */,
-				6A1570D825E1C78600E0C6B1 /* OverpassAPI.swift in Sources */,
 				6AA4A6792336F0A30002E467 /* ResultTableViewController.swift in Sources */,
 				6AE887652331913600C355F5 /* AppDelegate.swift in Sources */,
 				6AA4A6732336EBBE0002E467 /* ResultTableViewCell.swift in Sources */,
